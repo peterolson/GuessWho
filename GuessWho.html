@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Guess Who</title>
+        <style>
+            #images {
+                width: 960px;
+                text-align: center;
+                margin: 0 auto;
+            }
+            body {
+                text-align: center;
+            }
+            .imgBox {
+                display: inline-block;
+            }
+            .hidden {
+                opacity: 0.2;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="changeGroup" onclick="getRandomImgs()">Get Different People</button>
+        <div id="images"></div>
+        <script src="data.js"></script>
+        <script>
+            var imgsDiv = document.getElementById("images");
+
+            if (location.hash) interpretHash();
+            else getRandomImgs();
+
+            function imageContainer(i) {
+                return "<div class='imgBox'><img src='" + imgs[i] + "' onclick='hideImg(this)'><div>" + i + "</div></div>";
+            }
+
+            function interpretHash() {
+                imgsDiv.innerHTML = "";
+                var indices = location.hash.slice(1).split("%");
+                for (var i = 0; i < indices.length; i++) {
+                    imgsDiv.innerHTML += imageContainer(indices[i]);
+                }
+            }
+
+            function getRandomImgs(n) {
+                n = n || 20;
+                imgsDiv.innerHTML = "";
+                var url = [];
+                for (var i = 0; i < n; i++) {
+                    var index = Math.random() * imgs.length | 0;
+                    url.push(index);
+                    imgsDiv.innerHTML += imageContainer(index);
+                }
+
+                return location.hash = url.join("%");
+            }
+
+            function hideImg(img) {
+                img.className = img.className === "hidden" ? "visible" : "hidden";
+            }
+        </script>
+    </body>
+</html>
